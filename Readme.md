@@ -1,1 +1,73 @@
-Key Technical Features1. Advanced Retrieval TechniquesTo ensure the most relevant context is provided to the LLM, the system employs a multi-stage retrieval pipeline:Hybrid Search: Seamlessly combines dense Vector Search with sparse BM25 retrieval.Maximal Marginal Relevance (MMR): Optimizes for both relevance and diversity to eliminate redundant information.Flash Reranker: A final scoring layer that re-orders candidates to ensure the highest quality context reaches the model.2. Query IntelligenceThe system doesn't just search; it understands the intent behind the query:Query Rewriting: Automatically reformulates user questions for better search performance.HyDE (Hypothetical Document Embeddings): Generates a synthetic response to assist in finding more relevant document clusters for complex queries.3. High-Fidelity Data ProcessingMulti-PDF Support: Robust handling of various document structures.Semantic Splitting: Uses RecursiveCharacterTextSplitter combined with tiktoken encoding to ensure chunks are token-aware and semantically coherent.Agentic Layer & MemoryThis project transcends traditional "One-Shot" RAG by introducing an intelligent decision-making layer.The Agentic Decision EngineThe system functions as an autonomous agent that evaluates every query to determine the optimal path:Retrieval Necessity: Decides if the local knowledge base is required.Direct Response: Routes general inquiries directly to the LLM.Domain Guardrails: Identifies and handles queries that fall outside the defined knowledge scope.Conversational MemoryTo provide a true assistant experience, the system maintains a persistent state:Context Awareness: Tracks the trajectory of the conversation.Dialogue Continuity: Allows for follow-up questions without repeating context.System ArchitectureThe workflow follows a structured pipeline designed for precision:Input: User Query.Optimization: Query Rewriting & HyDE Expansion.Retrieval: Hybrid Search (Vector + BM25).Refinement: MMR Diversity Ranking & Flash Reranking.Reasoning: Agent Decision Layer & Memory Integration.Output: Final Natural Language Response.Tech StackCategoryTechnologyLanguagePythonOrchestrationLangChainInferenceGroq LLM APIsVector StoreChroma DBAPI FrameworkFastAPIRerankingFlash RerankerSearchBM25
+# Intelligent RAG Assistant
+> An advanced agentic retrieval-augmented generation system for precise document intelligence.
+
+---
+
+## 01. System Overview
+The **Intelligent RAG Assistant** is a sophisticated Question Answering framework designed to bridge the gap between static Large Language Models and dynamic, private data. By integrating a multi-stage retrieval pipeline and an autonomous decision layer, the system ensures high-fidelity responses grounded in verified document context.
+
+---
+
+## 02. Technical Architecture
+The system follows a non-linear pipeline to transform raw queries into refined knowledge:
+
+1.  **Input & Optimization**: Query Rewriting and HyDE (Hypothetical Document Embeddings) expansion.
+2.  **Hybrid Retrieval**: Concurrent Vector Search and BM25 execution.
+3.  **Refinement**: MMR (Maximal Marginal Relevance) for diversity and Flash Reranking for precision.
+4.  **Agentic Layer**: Reasoning engine to determine retrieval necessity and domain alignment.
+5.  **Memory Integration**: Persistence of conversation history for contextual continuity.
+
+---
+
+## 03. Core Capabilities
+
+### Advanced Retrieval Engine
+| Feature | Description |
+| :--- | :--- |
+| **Hybrid Search** | Merges semantic vector similarity with keyword-based BM25. |
+| **MMR Ranking** | Minimizes redundancy by selecting diverse document chunks. |
+| **Flash Reranker** | Applies cross-encoder scoring to prioritize the most relevant context. |
+
+### Query Intelligence
+* **Query Transformation**: Reformulates ambiguous user inputs into search-optimized queries.
+* **HyDE Expansion**: Generates synthetic documents to improve embedding-based lookup in complex scenarios.
+
+### Data Engineering
+* **Recursive Splitting**: Intelligent chunking via `RecursiveCharacterTextSplitter`.
+* **Token-Aware Encoding**: Utilizes `tiktoken` to maintain semantic integrity within model context windows.
+
+---
+
+## 04. The Agentic Layer
+Beyond standard RAG, this system introduces an **Intelligent Decision Layer** that acts as a router for incoming requests:
+
+* **Knowledge Routing**: Automatically determines if a query requires document retrieval or if it can be handled by the base LLM.
+* **Domain Guardrails**: Filters out-of-scope questions to maintain system focus and reliability.
+* **Stateful Memory**: Tracks the dialogue flow, allowing the assistant to resolve pronouns and follow-up questions seamlessly.
+
+---
+
+## 05. Technology Stack
+
+| Component | Technology |
+| :--- | :--- |
+| **Core Language** | Python |
+| **Orchestration** | LangChain |
+| **Inference Engine** | Groq LLM APIs |
+| **Vector Storage** | Chroma Database |
+| **API Layer** | FastAPI |
+| **Search/Rerank** | BM25, Flash Reranker |
+
+---
+
+## 06. Getting Started
+
+### Environment Setup
+The system requires the following environment variables:
+* `GROQ_API_KEY`: For LLM inference.
+* `CHROMA_DB_PATH`: Path for persistent vector storage.
+
+### Installation
+```bash
+pip install -r requirements.txt
+python main.py
