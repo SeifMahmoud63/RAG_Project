@@ -1,0 +1,27 @@
+# Core Frameworks
+langchain
+langchain-community
+langgraph
+langchain-groq
+langchain-chroma
+
+# Embeddings & Models
+sentence-transformers
+huggingface_hub
+flashrank
+rank_bm25
+tiktoken
+
+# Vector Database
+chromadb
+
+# Document Loaders & Processing
+pypdf
+unstructured
+python-pptx
+python-magic-bin; sys_platform == 'win32'
+python-magic; sys_platform != 'win32'
+
+# Utilities
+python-dotenv
+ipykernel
