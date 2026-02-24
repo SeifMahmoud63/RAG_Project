@@ -55,7 +55,7 @@ Beyond standard RAG, this system introduces an **Intelligent Decision Layer** th
 | **Orchestration** | LangChain |
 | **Inference Engine** | Groq LLM APIs |
 | **Vector Storage** | Chroma Database |
-| **API Layer** | FastAPI |
+| **UI** | Streamlit |
 | **Search/Rerank** | BM25, Flash Reranker |
 
 ---
