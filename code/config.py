@@ -1,5 +1,5 @@
 from langchain_groq import ChatGroq
-import os
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 
 def get_llm(temperature=0):
     return ChatGroq(
@@ -7,3 +7,6 @@ def get_llm(temperature=0):
         temperature=temperature
     )
 
+
+def get_embedding():
+    return HuggingFaceBgeEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")

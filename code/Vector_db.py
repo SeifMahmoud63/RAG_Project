@@ -1,11 +1,8 @@
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain_community.vectorstores import Chroma
 import os
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
-from langchain_community.vectorstores import Chroma
-
+from config import get_embedding
 def vector_db(docs=None):
-    embedding_model = HuggingFaceBgeEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embedding_model =get_embedding()
     persist_directory = "chroma_db"
     collection_name = "Machine_Learning"
 
