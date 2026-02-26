@@ -3,13 +3,16 @@ from langgraph.prebuilt import tools_condition, ToolNode
 from config import get_llm
 from tools import create_tools
 from langchain_core.messages import SystemMessage, ToolMessage
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver
+import sqlite3
 
 def build_agent(vector, chunks):
     llm = get_llm()
     tools = create_tools(vector, chunks)
     llm_with_bind = llm.bind_tools(tools)
     tool_node = ToolNode(tools)
-
+    memory = MemorySaver()
     def call_model(state: MessagesState):
         messages = state["messages"]
         
@@ -17,7 +20,7 @@ def build_agent(vector, chunks):
         - To answer technical questions, use 'Search_Local_Documents'.
         - For general info, use 'Tavily_Tool'.
         - IMPORTANT: Once you receive data from a tool, analyze it and give the FINAL ANSWER immediately. 
-        - DO NOT call the same tool twice with the same query.""")
+        - Always look at the chat history to answer follow-up questions..""")
 
         if not any(isinstance(m, SystemMessage) for m in messages):
             current_messages = [sys_prompt] + messages
@@ -36,4 +39,4 @@ def build_agent(vector, chunks):
     workflow.add_conditional_edges("agent", tools_condition)
     workflow.add_edge("tools", "agent") 
 
-    return workflow.compile()
+    return workflow.compile(checkpointer=memory)

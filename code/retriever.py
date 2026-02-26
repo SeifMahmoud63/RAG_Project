@@ -64,7 +64,7 @@ def advanced_retrieve(vector_store, docs, query):
     rewritten_query = rewrite_query(query)
 
  
-    hyde_doc = generate_hyde(rewritten_query)
+    hyde_doc = generate_hyde(query)
 
     candidates = hybrid_search(vector_store, docs, hyde_doc)
 

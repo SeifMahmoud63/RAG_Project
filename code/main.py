@@ -24,18 +24,21 @@ else:
 
 agent_app = build_agent(vector, chunks)
 
-query = input("\nUser: ")
-messages = [HumanMessage(content=query)]
-result = agent_app.invoke({"messages": messages}, config={"recursion_limit": 5})
+config = {"configurable": {"thread_id": "seif_session"}, "recursion_limit": 10}
+
+print("--- Chat Started (Type 'exit' to stop) ---")
+
+while True:
+    query = input("\nUser: ")
+    if query.lower() in ['exit', 'quit']:
+        break
+
+    input_data = {"messages": [HumanMessage(content=query)]}
     
-for msg in result["messages"]:
-     if hasattr(msg, 'tool_calls') and msg.tool_calls:
-        print(f"Agent decided to use tool: {msg.tool_calls[0]['name']}")
+    result = agent_app.invoke(input_data, config=config)
+    
+    print(f"\nAI: {result['messages'][-1].content}")
 
-print(f"\nAI: {result['messages'][-1].content}")
 
-results = advanced_retrieve(vector, chunks, query)
 
-for doc in results:
-    print(doc.metadata)
 
