@@ -1,21 +1,28 @@
 langchain
 langchain-community
+langchain-core
 langgraph
+langgraph-checkpoint
+
 langchain-groq
+tavily-python
+
 langchain-chroma
+chromadb
 sentence-transformers
 huggingface_hub
+langchain-huggingface
+
 flashrank
 rank_bm25
-tiktoken
-chromadb
+
 pypdf
-unstructured
 python-pptx
+unstructured
+tiktoken
 python-magic-bin; sys_platform == 'win32'
 python-magic; sys_platform != 'win32'
+
 python-dotenv
 ipykernel
 streamlit
-langgraph
-tools
