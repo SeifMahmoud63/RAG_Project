@@ -12,14 +12,3 @@ def get_llm(temperature=0):
 
 def get_embedding():
     return HuggingFaceBgeEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-
-tavily = TavilySearchAPIRetriever(k=3)
-@tool
-def tavily_search(query: str) -> str:
-    """Search documents using Tavily API and return top 3 results."""
-    docs = tavily.get_relevant_documents(query)
-    return "\n\n".join([doc.page_content for doc in docs])
-
-def get_tools():
-    return [tavily_search]
