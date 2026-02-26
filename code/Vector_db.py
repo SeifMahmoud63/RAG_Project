@@ -7,7 +7,6 @@ def vector_db(docs=None):
     collection_name = "Machine_Learning"
 
     if os.path.exists(persist_directory) and os.listdir(persist_directory):
-        # Just load it
         vectorstore = Chroma(
             persist_directory=persist_directory,
             embedding_function=embedding_model,
