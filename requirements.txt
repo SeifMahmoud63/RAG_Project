@@ -25,3 +25,5 @@ python-magic; sys_platform != 'win32'
 # Utilities
 python-dotenv
 ipykernel
+
+streamlit
