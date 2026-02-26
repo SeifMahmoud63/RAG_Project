@@ -7,6 +7,7 @@ from Agent import build_agent
 from Vector_db import vector_db
 from chunking import chunking
 from loader import load_documents_from_folder
+from judge import RAGJudge 
 
 st.set_page_config(page_title="Seif AI Agent", page_icon="🧠🇦🇮")
 st.title("RAG Multi-Tool Agent")
@@ -28,9 +29,9 @@ def initialize_system():
         ]
     
     agent_app = build_agent(vector, chunks)
-    return agent_app
+    return agent_app, vector
 
-agent_app = initialize_system()
+agent_app, vector = initialize_system()
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -56,11 +57,32 @@ if prompt := st.chat_input("Ask me anything about your files or the web..."):
             result = agent_app.invoke(input_data, config=config)
             
             final_answer = result["messages"][-1].content
-            
             message_placeholder.markdown(final_answer)
             
             st.session_state.messages.append({"role": "assistant", "content": final_answer})
-            
+
+            with st.sidebar:
+                st.divider()
+                st.subheader("AI Quality Judge")
+                with st.spinner("Evaluating response..."):
+        
+                    relevant_docs = vector.similarity_search(prompt, k=3)
+                    context_for_judge = "\n".join([d.page_content for d in relevant_docs])
+                    
+                    judge = RAGJudge()
+                    eval_res = judge.evaluate_response(prompt, context_for_judge, final_answer)
+                    
+                    if "error" not in eval_res:
+                        st.metric("Score", f"{eval_res['score']}/10")
+                        st.write(f"**Faithfulness:** {eval_res['faithfulness_score']}/5")
+                        st.write(f"**Relevance:** {eval_res['relevance_score']}/5")
+                        with st.expander("See Reasoning"):
+                            st.write(eval_res['reasoning'])
+                        if eval_res.get('hallucination_detected'):
+                            st.error("Hallucination Alert!")
+                    else:
+                        st.error("Evaluation unavailable")
+
         except Exception as e:
             st.error(f"Error: {str(e)}")
 

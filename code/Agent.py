@@ -4,8 +4,6 @@ from config import get_llm
 from tools import create_tools
 from langchain_core.messages import SystemMessage, ToolMessage
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.checkpoint.sqlite import SqliteSaver
-import sqlite3
 
 def build_agent(vector, chunks):
     llm = get_llm()
