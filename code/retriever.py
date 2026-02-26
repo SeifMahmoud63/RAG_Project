@@ -2,11 +2,12 @@ from langchain_groq import ChatGroq
 from langchain_community.retrievers import BM25Retriever
 from langchain_community.document_compressors import FlashrankRerank
 from dotenv import load_dotenv
+from config import get_llm
 import os
 
 load_dotenv()
 GROQ_API_KEY=os.getenv("GROQ_API_KEY")
-llm = ChatGroq(model="llama-3.1-8b-instant")
+llm = get_llm(temperature=0)
 
 # Query Rewriting
 def rewrite_query(query):

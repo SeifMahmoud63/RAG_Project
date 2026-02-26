@@ -7,6 +7,8 @@ from retriever import advanced_retrieve
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.documents import Document
+from config import get_llm
+
 
 load_dotenv()
 
@@ -42,7 +44,8 @@ def main():
         ]
 
 
-    llm = ChatGroq(model="llama-3.1-8b-instant")
+    llm = get_llm(temperature=0)
+
 
     prompt_template = ChatPromptTemplate.from_messages([
         ("system",
@@ -65,12 +68,16 @@ def main():
         )
 
     response = chain.invoke({
-            "context": context_text,
-            "input": query
-        })
+    "context": context_text,
+    "input": query
+})
 
     print("\n Answer:\n", response.content)
+    print("----------------------------------------------")
 
+
+    for doc in results: 
+      print(doc.metadata)
 
 if __name__ == "__main__":
     main()
