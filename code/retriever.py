@@ -9,7 +9,6 @@ load_dotenv()
 GROQ_API_KEY=os.getenv("GROQ_API_KEY")
 llm = get_llm(temperature=0)
 
-# Query Rewriting
 def rewrite_query(query):
     prompt = f"""
     Rewrite the following question to be more specific and optimized for document retrieval:
@@ -19,7 +18,6 @@ def rewrite_query(query):
     return llm.invoke(prompt).content
 
 
-# HyDE Generation
 def generate_hyde(query):
     prompt = f"""
     Write a detailed answer to the following question:
@@ -37,7 +35,6 @@ def hybrid_search(vector_store, docs, query):
     )
     vector_docs = vector_retriever.invoke(query)
 
-    # BM25
     bm25_retriever = BM25Retriever.from_documents(docs)
     bm25_retriever.k = 4
     bm25_docs = bm25_retriever.invoke(query)
@@ -46,7 +43,6 @@ def hybrid_search(vector_store, docs, query):
     return list({doc.page_content: doc for doc in vector_docs + bm25_docs}.values())
 
 
-# Reranking
 def rerank(query, documents, top_k=4):
     compressor = FlashrankRerank(
         top_n=top_k
@@ -58,12 +54,11 @@ def rerank(query, documents, top_k=4):
     )
 
 
-# Final Advanced Retrieval
 def advanced_retrieve(vector_store, docs, query):
 
     rewritten_query = rewrite_query(query)
 
-    hyde_doc = generate_hyde(query)
+    hyde_doc = generate_hyde(rewritten_query)
 
     candidates = hybrid_search(vector_store, docs, hyde_doc)
 
