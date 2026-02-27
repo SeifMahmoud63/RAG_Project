@@ -14,10 +14,6 @@ def build_agent(vector, chunks):
     def call_model(state: MessagesState):
         messages = state["messages"]
         
-#         sys_prompt = SystemMessage(content="""- Always reason before taking action.
-# - If more information is needed, choose the appropriate tool.
-# - You can use multiple tool calls if necessary.
-# - Do not answer until you are confident.""")
         
         sys_prompt = SystemMessage(content="""- You are a helpful assistant with access to tools.
 - First, briefly reason about the user's request.
