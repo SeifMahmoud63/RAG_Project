@@ -49,25 +49,16 @@ Beyond standard RAG, this system introduces an **Intelligent Decision Layer** th
 
 ## 05. Technology Stack
 
-| Component | Technology |
-| :--- | :--- |
-| **Core Language** | Python |
-| **Orchestration** | LangChain |
-| **Inference Engine** | Groq LLM APIs |
-| **Vector Storage** | Chroma Database |
-| **UI** | Streamlit |
-| **Search/Rerank** | BM25, Flash Reranker |
+| Component                   | Technology           |
+| :-------------------------- | :------------------- |
+| **Core Language**           | Python               |
+| **Orchestration**           | LangChain            |
+| **Inference Engine**        | Groq LLM APIs        |
+| **Vector Storage**          | Chroma Database      |
+| **UI**                      | Streamlit            |
+| **Search/Rerank**           | BM25, Flash Reranker |
+| **Evaluation / Validation** | LLM as Judge         |
+
 
 ---
 
-## 06. Getting Started
-
-### Environment Setup
-The system requires the following environment variables:
-* `GROQ_API_KEY`: For LLM inference.
-* `CHROMA_DB_PATH`: Path for persistent vector storage.
-
-### Installation
-```bash
-pip install -r requirements.txt
-python main.py
