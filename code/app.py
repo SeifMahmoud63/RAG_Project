@@ -96,3 +96,192 @@ with st.sidebar:
     if st.button("Clear Chat Memory"):
         st.session_state.messages = []
         st.rerun()
+        
+# import streamlit as st
+# import os
+# from langchain_core.messages import HumanMessage
+# from langchain_core.documents import Document
+
+# from Agent import build_agent
+# from Vector_db import vector_db
+# from chunking import chunking
+# from loader import load_documents_from_folder
+# from judge import RAGJudge
+
+
+# st.set_page_config(page_title="Seif AI Agent", page_icon="🧠🇦🇮")
+# st.title("RAG Multi-Tool Agent")
+
+
+# # ---------------------------
+# # System Initialization
+# # ---------------------------
+
+# @st.cache_resource(ttl=3600, show_spinner=False)
+# def initialize_system():
+
+#     persist_directory = "chroma_db"
+
+#     if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
+
+#         docs = load_documents_from_folder("../data/")
+#         chunks = chunking(docs)
+#         vector = vector_db(chunks)
+
+#     else:
+
+#         vector = vector_db()
+
+#         db_data = vector.get(include=["documents", "metadatas"])
+
+#         chunks = [
+#             Document(
+#                 page_content=db_data["documents"][i],
+#                 metadata=db_data["metadatas"][i] if db_data["metadatas"] else {}
+#             )
+#             for i in range(len(db_data["documents"]))
+#         ]
+
+#     agent_app = build_agent(vector, chunks)
+
+#     return agent_app, vector
+
+
+# agent_app, vector = initialize_system()
+
+
+# # ---------------------------
+# # Chat Memory
+# # ---------------------------
+
+# if "messages" not in st.session_state:
+#     st.session_state.messages = []
+
+
+# for message in st.session_state.messages:
+#     with st.chat_message(message["role"]):
+#         st.markdown(message["content"])
+
+
+# # ---------------------------
+# # Chat Execution
+# # ---------------------------
+
+# if prompt := st.chat_input("Ask me anything about your files or the web..."):
+
+#     st.session_state.messages.append(
+#         {"role": "user", "content": prompt}
+#     )
+
+#     with st.chat_message("user"):
+#         st.markdown(prompt)
+
+#     with st.chat_message("assistant"):
+
+#         message_placeholder = st.status("Thinking...", expanded=False)
+
+#         config = {
+#             "configurable": {"thread_id": "streamlit_session"},
+#             "recursion_limit": 10
+#         }
+
+#         try:
+
+#             # ---------------------------
+#             # Agent Reasoning
+#             # ---------------------------
+
+#             input_data = {
+#                 "messages": [HumanMessage(content=prompt)]
+#             }
+
+#             result = agent_app.invoke(
+#                 input_data,
+#                 config=config
+#             )
+
+#             final_answer = result["messages"][-1].content
+
+#             # Token safety
+#             final_answer = final_answer[:1500]
+
+#             message_placeholder.update(label="Answer Ready ✅")
+
+#             st.markdown(final_answer)
+
+#             st.session_state.messages.append(
+#                 {"role": "assistant", "content": final_answer}
+#             )
+
+
+#             # ---------------------------
+#             # Judge Evaluation (Optimized 🔥)
+#             # ---------------------------
+
+#             with st.sidebar:
+
+#                 st.divider()
+#                 st.subheader("AI Quality Judge")
+
+#                 # ✅ Judge only if conditions met
+#                 if len(prompt) > 20 and len(final_answer) > 50:
+
+#                     with st.spinner("Evaluating response..."):
+
+#                         relevant_docs = vector.similarity_search(
+#                             prompt,
+#                             k=3
+#                         )
+
+#                         context_for_judge = "\n".join(
+#                             [d.page_content[:800] for d in relevant_docs]
+#                         )[:2000]
+
+#                         eval_res = RAGJudge(
+#                             query=prompt,
+#                             context=context_for_judge,
+#                             response=final_answer
+#                         )
+
+#                         if eval_res and "error" not in eval_res:
+
+#                             st.metric(
+#                                 "Score",
+#                                 f"{eval_res['score']}/10"
+#                             )
+
+#                             st.write(
+#                                 f"Faithfulness: {eval_res.get('faithfulness_score','N/A')}/5"
+#                             )
+
+#                             st.write(
+#                                 f"Relevance: {eval_res.get('relevance_score','N/A')}/5"
+#                             )
+
+#                             with st.expander("See Reasoning"):
+#                                 st.write(eval_res.get("reasoning", ""))
+
+#                             if eval_res.get("hallucination_detected"):
+#                                 st.error("⚠ Hallucination Alert!")
+
+#                         else:
+#                             st.error("Evaluation unavailable")
+
+#                 else:
+#                     st.info("Judge skipped (Short query or short answer)")
+
+#         except Exception as e:
+#             st.error(f"Error: {str(e)}")
+
+
+# # ---------------------------
+# # Sidebar Controls
+# # ---------------------------
+
+# with st.sidebar:
+
+#     st.info("Files loaded from '../data/' folder.")
+
+#     if st.button("Clear Chat Memory"):
+#         st.session_state.messages = []
+#         st.rerun()
