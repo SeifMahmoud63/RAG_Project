@@ -5,7 +5,7 @@ from langchain_core.tools import tool
 
 def get_llm(temperature=0):
     return ChatGroq(
-        model="llama-3.1-8b-instant",
+        model="llama-3.3-70b-versatile",
         temperature=temperature
     )
 

@@ -9,6 +9,7 @@ from chunking import chunking
 from loader import load_documents_from_folder
 from judge import RAGJudge 
 
+
 st.set_page_config(page_title="Seif AI Agent", page_icon="🧠🇦🇮")
 st.title("RAG Multi-Tool Agent")
 
@@ -69,8 +70,12 @@ if prompt := st.chat_input("Ask me anything about your files or the web..."):
                     relevant_docs = vector.similarity_search(prompt, k=3)
                     context_for_judge = "\n".join([d.page_content for d in relevant_docs])
                     
-                    judge = RAGJudge()
-                    eval_res = judge.evaluate_response(prompt, context_for_judge, final_answer)
+                    
+                    eval_res = RAGJudge(
+                                query=prompt,
+                                context=context_for_judge,
+                                 response=final_answer
+                                                            )
                     
                     if "error" not in eval_res:
                         st.metric("Score", f"{eval_res['score']}/10")

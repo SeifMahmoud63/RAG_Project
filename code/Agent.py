@@ -14,11 +14,10 @@ def build_agent(vector, chunks):
     def call_model(state: MessagesState):
         messages = state["messages"]
         
-        sys_prompt = SystemMessage(content="""You are a professional AI Assistant.
-        - To answer technical questions, use 'Search_Local_Documents'.
-        - For general info, use 'Tavily_Tool'.
-        - IMPORTANT: Once you receive data from a tool, analyze it and give the FINAL ANSWER immediately. 
-        - Always look at the chat history to answer follow-up questions..""")
+        sys_prompt = SystemMessage(content="""- Always reason before taking action.
+- If more information is needed, choose the appropriate tool.
+- You can use multiple tool calls if necessary.
+- Do not answer until you are confident.""")
 
         if not any(isinstance(m, SystemMessage) for m in messages):
             current_messages = [sys_prompt] + messages

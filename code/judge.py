@@ -3,7 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from config import get_llm
 
-def evaluate_response(query, context, response):
+def RAGJudge(query, context, response):
 
     parser = JsonOutputParser()
     judge_llm = get_llm()
