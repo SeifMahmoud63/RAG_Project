@@ -53,7 +53,7 @@ Beyond standard RAG, this system introduces an **Intelligent Decision Layer** th
 | :-------------------------- | :------------------- |
 | **Core Language**           | Python               |
 | **Orchestration**           | LangChain            |
-| **Inference Engine**        | Groq LLM APIs        |
+| **Inference Engine**        | Cohere LLM APIs        |
 | **Vector Storage**          | Chroma Database      |
 | **UI**                      | Streamlit            |
 | **Search/Rerank**           | BM25, Flash Reranker |
